@@ -1,5 +1,5 @@
 /* Windows CSS - Emacs Buffer/Window Styling
- * Emacs Blog Theme - Single Buffer View
+ * Emacs Blog Theme - With Split View Support
  */
 
 /* ============================================
@@ -14,6 +14,15 @@
   min-height: 0; /* Important for flex scroll */
 }
 
+/* Split modes */
+.buffer-container.split-horizontal {
+  flex-direction: row;
+}
+
+.buffer-container.split-vertical {
+  flex-direction: column;
+}
+
 /* ============================================
    BUFFER (Full-screen buffer view)
    ============================================ */
@@ -23,10 +32,60 @@
   flex: 1;
   overflow: hidden;
   min-height: 0;
+  min-width: 0;
 }
 
 .buffer.active {
   display: flex;
+}
+
+/* Focused buffer indicator */
+.buffer.focused {
+  outline: none;
+}
+
+.buffer.focused .modeline {
+  background-color: var(--modeline-bg);
+  color: var(--modeline-fg);
+}
+
+.buffer:not(.focused) .modeline {
+  background-color: var(--modeline-bg-inactive);
+  color: var(--modeline-fg-inactive);
+}
+
+/* ============================================
+   SPLIT VIEW STYLES
+   ============================================ */
+
+/* Horizontal split (side by side) */
+.buffer-container.split-horizontal .buffer.active {
+  flex: 1;
+  min-width: 200px;
+}
+
+.buffer-container.split-horizontal .buffer-list.active {
+  border-right: 1px solid var(--border);
+  max-width: 50%;
+}
+
+.buffer-container.split-horizontal .buffer-content.active {
+  flex: 1;
+}
+
+/* Vertical split (stacked) */
+.buffer-container.split-vertical .buffer.active {
+  flex: 1;
+  min-height: 100px;
+}
+
+.buffer-container.split-vertical .buffer-list.active {
+  border-bottom: 1px solid var(--border);
+  max-height: 50%;
+}
+
+.buffer-container.split-vertical .buffer-content.active {
+  flex: 1;
 }
 
 /* ============================================
@@ -243,9 +302,28 @@
 }
 
 /* ============================================
-   RESPONSIVE (Mobile)
+   RESPONSIVE (Mobile) - No split on small screens
    ============================================ */
 @media (max-width: 768px) {
+  /* Force single buffer view on mobile */
+  .buffer-container.split-horizontal,
+  .buffer-container.split-vertical {
+    flex-direction: column;
+  }
+  
+  .buffer-container.split-horizontal .buffer.active,
+  .buffer-container.split-vertical .buffer.active {
+    max-width: none;
+    max-height: none;
+    border: none;
+  }
+  
+  /* Only show focused buffer on mobile */
+  .buffer-container.split-horizontal .buffer.active:not(.focused),
+  .buffer-container.split-vertical .buffer.active:not(.focused) {
+    display: none;
+  }
+  
   .article-meta {
     display: none;
   }
