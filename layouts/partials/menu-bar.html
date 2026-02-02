@@ -19,13 +19,8 @@
           <span>All Posts</span>
           <span class="menu-shortcut">g p</span>
         </a>
-        <div class="menu-separator" role="separator"></div>
-        {{ with .Site.Params.rss -}}
-        <a href="{{ "/index.xml" | relURL }}" class="menu-dropdown-item" role="menuitem" target="_blank">
-          <span>RSS Feed</span>
-        </a>
-        {{- end }}
         {{ with .OutputFormats.Get "RSS" -}}
+        <div class="menu-separator" role="separator"></div>
         <a href="{{ .RelPermalink }}" class="menu-dropdown-item" role="menuitem" target="_blank">
           <span>RSS Feed</span>
         </a>
