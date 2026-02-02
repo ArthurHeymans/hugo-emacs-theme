@@ -232,8 +232,8 @@
       item.addEventListener('click', handleDropdownClick);
     });
     
-    // Theme toggle buttons (including the one in menu bar right)
-    document.querySelectorAll('[data-action="toggle-theme"]').forEach(btn => {
+    // Theme toggle buttons (only the one in menu bar right, dropdown items handled by handleDropdownClick)
+    document.querySelectorAll('[data-action="toggle-theme"]:not(.menu-dropdown-item)').forEach(btn => {
       btn.addEventListener('click', (e) => {
         toggleTheme();
         closeAllMenus();
