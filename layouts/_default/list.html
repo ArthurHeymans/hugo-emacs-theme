@@ -29,18 +29,20 @@
           data-date="{{ $page.Date.Format "2006-01-02" }}"
           data-reading-time="{{ $page.ReadingTime }}"
           data-word-count="{{ $page.WordCount }}">
-        <span class="article-marker" aria-hidden="true">{{ if eq $index 0 }}>{{ else }} {{ end }}</span>
-        <span class="article-meta">
-          <span class="article-reading-time" title="Reading time">{{ $page.ReadingTime }}min</span>
-          <span class="article-word-count" title="Word count">{{ $page.WordCount | lang.FormatNumber 0 }}</span>
-          <span class="article-date">{{ $page.Date.Format "2006-01-02" }}</span>
-        </span>
-        <span class="article-title">{{ $page.Title }}</span>
-        {{- with $page.Params.tags }}
-        <span class="article-tags">
-          {{- range first 2 . }}#{{ . }} {{ end -}}
-        </span>
-        {{- end }}
+        <a href="{{ $page.RelPermalink }}" class="article-link">
+          <span class="article-marker" aria-hidden="true">{{ if eq $index 0 }}>{{ else }} {{ end }}</span>
+          <span class="article-meta">
+            <span class="article-reading-time" title="Reading time">{{ $page.ReadingTime }}min</span>
+            <span class="article-word-count" title="Word count">{{ $page.WordCount | lang.FormatNumber 0 }}</span>
+            <span class="article-date">{{ $page.Date.Format "2006-01-02" }}</span>
+          </span>
+          <span class="article-title">{{ $page.Title }}</span>
+          {{- with $page.Params.tags }}
+          <span class="article-tags">
+            {{- range first 2 . }}#{{ . }} {{ end -}}
+          </span>
+          {{- end }}
+        </a>
       </li>
       {{- else }}
       <li class="article-item" style="color: var(--fg-dim); padding: 1em;">

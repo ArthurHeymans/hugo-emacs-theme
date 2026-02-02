@@ -12,6 +12,10 @@
   let splitMode = null; // null, 'horizontal', or 'vertical'
   let keySequence = '';
   let sequenceTimeout = null;
+  
+  // Store the base URL (list page) for history navigation
+  const baseUrl = window.location.pathname;
+  const baseTitle = document.title;
 
   // DOM elements
   const bufferContainer = document.getElementById('buffer-container');
@@ -292,18 +296,27 @@
 
     const selectedItem = items[selectedIndex];
     const title = selectedItem.dataset.title;
+    const url = selectedItem.dataset.url;
 
     // Check if we have embedded content (homepage)
     if (postsData) {
       const template = postsData.querySelector(`template[data-post-index="${selectedIndex}"]`);
       if (template) {
+        // Update URL using History API for bookmarkability
+        if (url && window.location.pathname !== url) {
+          history.pushState({ 
+            type: 'article', 
+            index: selectedIndex, 
+            url: url 
+          }, title, url);
+          document.title = title;
+        }
         loadArticleContent(template, title, true);
         return;
       }
     }
 
-    // Otherwise navigate to the URL
-    const url = selectedItem.dataset.url;
+    // Otherwise navigate to the URL (fallback)
     if (url) {
       window.location.href = url;
     }
@@ -368,10 +381,20 @@
     if (!splitMode) {
       const selectedItem = items[selectedIndex];
       const title = selectedItem.dataset.title;
+      const url = selectedItem.dataset.url;
       
       if (postsData) {
         const template = postsData.querySelector(`template[data-post-index="${selectedIndex}"]`);
         if (template) {
+          // Update URL using History API
+          if (url && window.location.pathname !== url) {
+            history.pushState({ 
+              type: 'article', 
+              index: selectedIndex, 
+              url: url 
+            }, title, url);
+            document.title = title;
+          }
           loadArticleContent(template, title, false);
         }
       }
@@ -400,6 +423,11 @@
     }
 
     // In single buffer mode, switch to list buffer
+    // Update URL back to list page
+    if (window.location.pathname !== baseUrl) {
+      history.pushState({ type: 'list' }, baseTitle, baseUrl);
+      document.title = baseTitle;
+    }
     switchBuffer('list');
     showMessage('Switched to buffer: *posts*');
   }
@@ -742,11 +770,42 @@
     const item = e.target.closest('.article-item');
     if (!item) return;
 
+    // Prevent default link navigation - JS will handle it
+    e.preventDefault();
+
     const index = parseInt(item.dataset.index, 10);
     if (!isNaN(index)) {
       focusBuffer('list');
       updateSelection(index);
       openSelectedArticle();
+    }
+  }
+
+  /**
+   * Handle browser back/forward navigation
+   */
+  function handlePopState(e) {
+    // Only handle if we have embedded posts data
+    if (!postsData) return;
+
+    const state = e.state;
+    
+    if (state && state.type === 'article' && state.index !== undefined) {
+      // Navigate to specific article
+      const items = getArticleItems();
+      if (items[state.index]) {
+        updateSelection(state.index);
+        const template = postsData.querySelector(`template[data-post-index="${state.index}"]`);
+        if (template) {
+          const title = items[state.index].dataset.title;
+          document.title = title;
+          loadArticleContent(template, title, true);
+        }
+      }
+    } else {
+      // Go back to list view
+      document.title = baseTitle;
+      switchBuffer('list');
     }
   }
 
@@ -768,6 +827,9 @@
     articleList?.addEventListener('click', handleArticleClick);
     bufferContent?.addEventListener('click', handleContentClick);
 
+    // Browser back/forward navigation
+    window.addEventListener('popstate', handlePopState);
+
     // Help close button
     document.getElementById('help-close')?.addEventListener('click', toggleHelp);
 
@@ -779,6 +841,11 @@
 
     // Set initial echo area message
     updateEchoHint();
+    
+    // Set initial history state for the list page
+    if (postsData && !history.state) {
+      history.replaceState({ type: 'list' }, baseTitle, baseUrl);
+    }
   }
 
   // Initialize when DOM is ready

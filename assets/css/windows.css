@@ -111,11 +111,15 @@
 .article-item {
   display: flex;
   align-items: baseline;
-  padding: 0.35em 0.75em;
   cursor: pointer;
   font-size: 0.9rem;
   border-left: 2px solid transparent;
   transition: background-color 0.1s ease;
+}
+
+/* Article link - enables no-JS browsing with full click area */
+.article-item .article-link {
+  padding: 0.35em 0.75em;
 }
 
 .article-item:hover {
@@ -190,6 +194,22 @@
 
 .article-item.selected .article-date {
   color: var(--blue);
+}
+
+/* Article link - enables no-JS browsing while preserving styling */
+.article-link {
+  display: flex;
+  align-items: baseline;
+  flex: 1;
+  text-decoration: none;
+  color: inherit;
+  min-width: 0; /* Allow flex item to shrink */
+}
+
+.article-link:hover,
+.article-link:visited {
+  text-decoration: none;
+  color: inherit;
 }
 
 /* Tags in list */
@@ -347,7 +367,7 @@
     display: none;
   }
   
-  .article-item {
+  .article-item .article-link {
     padding: 0.5em 0.75em;
   }
   

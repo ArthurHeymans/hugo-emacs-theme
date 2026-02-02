@@ -20,18 +20,20 @@
           data-date="{{ $post.Date.Format "2006-01-02" }}"
           data-reading-time="{{ $post.ReadingTime }}"
           data-word-count="{{ $post.WordCount }}">
-        <span class="article-marker" aria-hidden="true">{{ if eq $index 0 }}>{{ else }} {{ end }}</span>
-        <span class="article-meta">
-          <span class="article-reading-time" title="Reading time">{{ $post.ReadingTime }}min</span>
-          <span class="article-word-count" title="Word count">{{ $post.WordCount | lang.FormatNumber 0 }}</span>
-          <span class="article-date">{{ $post.Date.Format "2006-01-02" }}</span>
-        </span>
-        <span class="article-title">{{ $post.Title }}</span>
-        {{- with $post.Params.tags }}
-        <span class="article-tags">
-          {{- range first 2 . }}#{{ . }} {{ end -}}
-        </span>
-        {{- end }}
+        <a href="{{ $post.RelPermalink }}" class="article-link">
+          <span class="article-marker" aria-hidden="true">{{ if eq $index 0 }}>{{ else }} {{ end }}</span>
+          <span class="article-meta">
+            <span class="article-reading-time" title="Reading time">{{ $post.ReadingTime }}min</span>
+            <span class="article-word-count" title="Word count">{{ $post.WordCount | lang.FormatNumber 0 }}</span>
+            <span class="article-date">{{ $post.Date.Format "2006-01-02" }}</span>
+          </span>
+          <span class="article-title">{{ $post.Title }}</span>
+          {{- with $post.Params.tags }}
+          <span class="article-tags">
+            {{- range first 2 . }}#{{ . }} {{ end -}}
+          </span>
+          {{- end }}
+        </a>
       </li>
       {{- end }}
     </ul>
