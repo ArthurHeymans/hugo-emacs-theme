@@ -54,10 +54,11 @@ hugo server -D
 
 | Key | Action |
 |-----|--------|
-| `n` / `p` | Next/previous article (single buffer mode) |
-| `SPC` | Page down |
-| `S-SPC` | Page up |
-| `↓` / `↑` | Scroll line by line |
+| `n` / `p` | Scroll down/up (split mode) or next/prev article (single mode) |
+| `↓` / `↑` | Scroll down/up |
+| `PgDn` / `PgUp` | Page down/up |
+| `SPC` / `S-SPC` | Page down/up |
+| `C-v` / `M-v` | Page down/up (Emacs style) |
 | `<` / `>` | Beginning/end of article |
 | `q` | Go back to list |
 

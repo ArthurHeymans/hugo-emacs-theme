@@ -628,27 +628,49 @@
     if (focusedBuffer === 'content') {
       switch (key) {
         case 'n':
-          // n - next article (only in single buffer mode)
-          if (!ctrl && !splitMode) {
-            navigateArticle(1);
+          // n - scroll down or next article (single buffer mode without split)
+          if (!ctrl) {
+            if (splitMode) {
+              // In split mode, n scrolls content
+              contentBody?.scrollBy({ top: 150, behavior: 'smooth' });
+            } else {
+              // In single buffer mode, n goes to next article
+              navigateArticle(1);
+            }
             e.preventDefault();
           }
           break;
         case 'p':
-          // p - previous article (only in single buffer mode)
-          if (!ctrl && !splitMode) {
-            navigateArticle(-1);
+          // p - scroll up or previous article (single buffer mode without split)
+          if (!ctrl) {
+            if (splitMode) {
+              // In split mode, p scrolls content
+              contentBody?.scrollBy({ top: -150, behavior: 'smooth' });
+            } else {
+              // In single buffer mode, p goes to previous article
+              navigateArticle(-1);
+            }
             e.preventDefault();
           }
           break;
         case 'ArrowDown':
-          // Arrow down - scroll a bit
-          contentBody?.scrollBy({ top: 50, behavior: 'smooth' });
+          // Arrow down - scroll
+          contentBody?.scrollBy({ top: 150, behavior: 'smooth' });
           e.preventDefault();
           break;
         case 'ArrowUp':
-          // Arrow up - scroll a bit
-          contentBody?.scrollBy({ top: -50, behavior: 'smooth' });
+          // Arrow up - scroll
+          contentBody?.scrollBy({ top: -150, behavior: 'smooth' });
+          e.preventDefault();
+          break;
+        case 'PageDown':
+          // Page Down - scroll page
+          scrollContent('down');
+          e.preventDefault();
+          break;
+        case 'PageUp':
+          // Page Up - scroll page
+          scrollContent('up');
           e.preventDefault();
           break;
         case ' ':
