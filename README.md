@@ -148,4 +148,4 @@ This theme was fully vibe coded with [Claude](https://claude.ai) (Anthropic's AI
 
 ## License
 
-MIT License
+Dual-licensed under [MIT](LICENSE) or [Apache 2.0](LICENSE), at your option.
