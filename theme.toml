@@ -1,9 +1,10 @@
 # Theme metadata
 name = "Emacs"
 license = "MIT"
-licenselink = "https://github.com/ArthurHeymans/hugo-blog/blob/main/LICENSE"
+licenselink = "https://github.com/ArthurHeymans/hugo-emacs-theme/blob/main/LICENSE"
 description = "An Emacs-inspired Hugo theme with keyboard navigation and window management"
-homepage = "https://github.com/ArthurHeymans/hugo-blog"
+homepage = "https://github.com/ArthurHeymans/hugo-emacs-theme"
+demosite = "https://blog.aheymans.xyz"
 tags = ["emacs", "cli", "keyboard", "dark", "light", "blog", "monospace"]
 features = ["keyboard navigation", "split windows", "modeline", "modus themes"]
 min_version = "0.90.0"
