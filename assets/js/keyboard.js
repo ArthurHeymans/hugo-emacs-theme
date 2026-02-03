@@ -12,6 +12,7 @@
   let splitMode = null; // null, 'horizontal', or 'vertical'
   let keySequence = '';
   let sequenceTimeout = null;
+  let isScrollingProgrammatically = false; // Flag to prevent scroll handler during keyboard nav
   
   // Store the base URL (list page) for history navigation
   const baseUrl = window.location.pathname;
@@ -68,13 +69,20 @@
 
   /**
    * Update selection in the article list
+   * @param {number} newIndex - The new index to select
+   * @param {boolean} scroll - Whether to scroll the item into view (default: true)
    */
-  function updateSelection(newIndex) {
+  function updateSelection(newIndex, scroll = true) {
     const items = getArticleItems();
     if (items.length === 0) return;
 
     // Clamp index
     newIndex = Math.max(0, Math.min(newIndex, items.length - 1));
+    
+    // Skip if already selected
+    if (newIndex === selectedIndex && items[selectedIndex]?.classList.contains('selected')) {
+      return;
+    }
     
     // Remove old selection
     items.forEach((item, i) => {
@@ -92,8 +100,13 @@
     const marker = selectedItem.querySelector('.article-marker');
     if (marker) marker.textContent = '>';
 
-    // Scroll into view
-    selectedItem.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+    // Scroll into view (with flag to prevent scroll handler from fighting)
+    if (scroll) {
+      isScrollingProgrammatically = true;
+      selectedItem.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+      // Reset flag after scroll animation completes
+      setTimeout(() => { isScrollingProgrammatically = false; }, 150);
+    }
 
     // Update modeline
     updateListModeline();
@@ -817,6 +830,45 @@
   }
 
   /**
+   * Handle scroll on article list - update selection based on visible item
+   */
+  function handleListScroll(e) {
+    // Skip if this scroll was triggered by keyboard navigation
+    if (isScrollingProgrammatically) return;
+    
+    const scrollContainer = e.target;
+    const items = getArticleItems();
+    if (items.length === 0) return;
+    
+    const containerRect = scrollContainer.getBoundingClientRect();
+    const containerTop = containerRect.top;
+    
+    // Find the item closest to the top of the visible area
+    let closestIndex = 0;
+    let closestDistance = Infinity;
+    
+    items.forEach((item, index) => {
+      const itemRect = item.getBoundingClientRect();
+      const itemTop = itemRect.top - containerTop;
+      
+      // We want the item that's closest to the top of the container
+      // but still visible (itemTop >= 0 or item is partially visible)
+      if (itemTop >= -itemRect.height / 2) {
+        const distance = Math.abs(itemTop);
+        if (distance < closestDistance) {
+          closestDistance = distance;
+          closestIndex = index;
+        }
+      }
+    });
+    
+    // Update selection without scrolling (to avoid fighting with user scroll)
+    if (closestIndex !== selectedIndex) {
+      updateSelection(closestIndex, false);
+    }
+  }
+
+  /**
    * Initialize
    */
   function init() {
@@ -826,6 +878,12 @@
     // Click events
     articleList?.addEventListener('click', handleArticleClick);
     bufferContent?.addEventListener('click', handleContentClick);
+
+    // Scroll events for list buffer - update selection as user scrolls
+    const listBufferBody = bufferList?.querySelector('.buffer-body');
+    if (listBufferBody) {
+      listBufferBody.addEventListener('scroll', handleListScroll, { passive: true });
+    }
 
     // Browser back/forward navigation
     window.addEventListener('popstate', handlePopState);
