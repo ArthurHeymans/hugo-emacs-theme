@@ -90,6 +90,7 @@
   color: var(--menu-fg);
   cursor: pointer;
   transition: background-color 0.1s ease;
+  background: transparent;
 }
 
 .menu-dropdown-item:hover {
