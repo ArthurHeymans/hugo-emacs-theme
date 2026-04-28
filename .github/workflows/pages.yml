@@ -1,0 +1,67 @@
+name: Deploy demo site
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions: read-all
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+
+    steps:
+      - name: Checkout theme
+        uses: actions/checkout@v4
+        with:
+          path: emacs
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      - name: Install Hugo
+        run: |
+          HUGO_VERSION=0.160.1
+          curl -L -o hugo.deb "https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}/hugo_extended_${HUGO_VERSION}_linux-amd64.deb"
+          sudo dpkg -i hugo.deb
+
+      - name: Build example site
+        working-directory: emacs
+        run: |
+          hugo \
+            --gc \
+            --minify \
+            --source exampleSite \
+            --themesDir ../.. \
+            --theme emacs \
+            --baseURL "https://arthurheymans.github.io/hugo-emacs-theme/"
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: emacs/exampleSite/public
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
