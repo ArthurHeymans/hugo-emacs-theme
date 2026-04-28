@@ -17,7 +17,7 @@
     <ul class="article-list" id="article-list" role="listbox" aria-label="{{ .Title }}">
       {{- $pages := .Pages -}}
       {{- if .IsHome -}}
-        {{- $pages = where .Site.RegularPages "Section" "post" -}}
+        {{- $pages = where .Site.RegularPages "Section" "in" (slice "post" "posts") -}}
       {{- end -}}
       {{- range $index, $page := $pages.ByDate.Reverse -}}
       <li class="article-item{{ if eq $index 0 }} selected{{ end }}" 
@@ -97,7 +97,7 @@
 <div id="posts-data" style="display:none;">
   {{- $pages := .Pages -}}
   {{- if .IsHome -}}
-    {{- $pages = where .Site.RegularPages "Section" "post" -}}
+    {{- $pages = where .Site.RegularPages "Section" "in" (slice "post" "posts") -}}
   {{- end -}}
   {{- range $index, $page := $pages.ByDate.Reverse -}}
   <template data-post-index="{{ $index }}" data-post-url="{{ $page.RelPermalink }}">

@@ -2,7 +2,7 @@
 
 A Hugo theme that transforms your blog into an Emacs-like experience with buffer management, keyboard navigation, and authentic styling.
 
-![Emacs Hugo Theme Screenshot](images/screenshot.png)
+![Emacs Hugo Theme Screenshot](https://raw.githubusercontent.com/ArthurHeymans/hugo-emacs-theme/main/images/screenshot.png)
 
 ## Features
 
@@ -44,45 +44,45 @@ hugo server -D
 
 ### Navigation (List Buffer)
 
-| Key | Action |
-|-----|--------|
-| `n` / `↓` | Next article |
-| `p` / `↑` | Previous article |
-| `RET` / `o` | Open article |
-| `<` | Beginning of list |
-| `>` | End of list |
+| Key         | Action            |
+| ----------- | ----------------- |
+| `n` / `↓`   | Next article      |
+| `p` / `↑`   | Previous article  |
+| `RET` / `o` | Open article      |
+| `<`         | Beginning of list |
+| `>`         | End of list       |
 
 ### Navigation (Content Buffer)
 
-| Key | Action |
-|-----|--------|
-| `n` / `p` | Scroll down/up (split mode) or next/prev article (single mode) |
-| `↓` / `↑` | Scroll down/up |
-| `PgDn` / `PgUp` | Page down/up |
-| `SPC` / `S-SPC` | Page down/up |
-| `C-v` / `M-v` | Page down/up (Emacs style) |
-| `<` / `>` | Beginning/end of article |
-| `q` | Go back to list |
+| Key             | Action                                                         |
+| --------------- | -------------------------------------------------------------- |
+| `n` / `p`       | Scroll down/up (split mode) or next/prev article (single mode) |
+| `↓` / `↑`       | Scroll down/up                                                 |
+| `PgDn` / `PgUp` | Page down/up                                                   |
+| `SPC` / `S-SPC` | Page down/up                                                   |
+| `C-v` / `M-v`   | Page down/up (Emacs style)                                     |
+| `<` / `>`       | Beginning/end of article                                       |
+| `q`             | Go back to list                                                |
 
 ### Window Management
 
-| Key | Action |
-|-----|--------|
-| `C-x 3` | Split horizontal (side by side) |
-| `C-x 2` | Split vertical (stacked) |
-| `C-x 0` | Close current window |
-| `C-x 1` | Close other windows |
-| `C-x o` / `Tab` | Switch to other window |
+| Key             | Action                          |
+| --------------- | ------------------------------- |
+| `C-x 3`         | Split horizontal (side by side) |
+| `C-x 2`         | Split vertical (stacked)        |
+| `C-x 0`         | Close current window            |
+| `C-x 1`         | Close other windows             |
+| `C-x o` / `Tab` | Switch to other window          |
 
 ### View
 
-| Key | Action |
-|-----|--------|
-| `t` | Toggle dark/light theme |
-| `+` | Increase font size |
-| `-` | Decrease font size |
-| `?` | Show help overlay |
-| `C-g` / `Esc` | Quit/cancel |
+| Key           | Action                  |
+| ------------- | ----------------------- |
+| `t`           | Toggle dark/light theme |
+| `+`           | Increase font size      |
+| `-`           | Decrease font size      |
+| `?`           | Show help overlay       |
+| `C-g` / `Esc` | Quit/cancel             |
 
 ## Theme Customization
 

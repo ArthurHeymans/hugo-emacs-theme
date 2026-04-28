@@ -9,7 +9,7 @@
          tabindex="0">
   <div class="buffer-body">
     <ul class="article-list" id="article-list" role="listbox" aria-label="Articles">
-      {{- $posts := where .Site.RegularPages "Section" "post" -}}
+      {{- $posts := where .Site.RegularPages "Section" "in" (slice "post" "posts") -}}
       {{- range $index, $post := $posts.ByDate.Reverse -}}
       <li class="article-item{{ if eq $index 0 }} selected{{ end }}" 
           role="option"
@@ -68,7 +68,7 @@
 
 {{- /* Hidden container with all post content for JS to use */ -}}
 <div id="posts-data" style="display:none;">
-  {{- $posts := where .Site.RegularPages "Section" "post" -}}
+  {{- $posts := where .Site.RegularPages "Section" "in" (slice "post" "posts") -}}
   {{- range $index, $post := $posts.ByDate.Reverse -}}
   <template data-post-index="{{ $index }}" data-post-url="{{ $post.RelPermalink }}">
     <div class="post-header">
